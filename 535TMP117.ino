@@ -31,35 +31,19 @@ void loop() {
   if (Serial.available()){
     processSyncMessage();
   }
+  
   if (timeStatus() == timeNotSet)
     Serial.println("waiting for sync message");
   else{
     if (sensor.dataReady() == true){ // Function to make sure that there is data ready to be printed, only prints temperature values when data is ready
       float tempC = sensor.readTempC();
       float tempF = sensor.readTempF();
-      // Print temperature in °C and °F
-      /*
-      Serial.println(); // Create a white space for easier viewing
-      Serial.print("Temperature in Celsius: ");
-      Serial.println(tempC);
-      Serial.print("Temperature in Fahrenheit: ");
-      Serial.println(tempF);
-      */  
+      // Print temperature in °C and °F 
       time_t t = now();
-      float h = hour();
-      float m = minute();
-      float s = second();
-      float curr = now();
       String tmpC = "";
       tmpC.concat(tempC);
-      float sum = s+curr;
-      Serial.println(tmpC + "#" + sum);
-      delay(500); // Delay added for easier readings
+      Serial.println(tmpC + "#" + t);
     }
-    /*
-    if (Serial.available()){
-      processSyncMessage();
-    }*/
   }
 }
 
@@ -70,6 +54,7 @@ void processSyncMessage(){
      pctime = Serial.parseInt();
      if( pctime >= 1357041600) { // check the integer is a valid time (greater than Jan 1 2013)
        setTime(pctime); // Sync Arduino clock to the time received on the serial port
+       //Serial.print(pctime);
      }
   }
 }
